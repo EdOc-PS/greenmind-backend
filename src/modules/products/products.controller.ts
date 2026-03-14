@@ -1,27 +1,27 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ProductsService } from './products.service';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ApiResponse } from '@common/dto/response.dto';
 import { Product } from '@prisma/client';
+import { ProductsRepository } from './products.repository';
 
 @Controller('products')
 export class ProductsController {
-    constructor(private productsService: ProductsService) { }
+    constructor(private productsRepository: ProductsRepository) { }
 
     @Get()
     getProducts() {
-        return this.productsService.findAll();
+        return this.productsRepository.findAll();
     }
 
     @Get(":id")
     getUser(@Param("id") id: number) {
-        return this.productsService.findOne(id);
+        return this.productsRepository.findOne(id);
     }
 
     @Post()
     async createProduct(@Body() newProduct: CreateProductDto): Promise<ApiResponse<Product>> {
-        const product = await this.productsService.create(newProduct);
+        const product = await this.productsRepository.create(newProduct);
 
         return {
             success: true,
@@ -32,11 +32,11 @@ export class ProductsController {
 
     @Delete(":id")
     deleteUser(@Param("id") id: number) {
-        return this.productsService.delete(id);
+        return this.productsRepository.delete(id);
     }
 
     @Patch(":id")
     updateUser(@Param("id") id: number, @Body() updatedProduct: UpdateProductDto) {
-        return this.productsService.update(id, updatedProduct);
+        return this.productsRepository.update(id, updatedProduct);
     }
 }

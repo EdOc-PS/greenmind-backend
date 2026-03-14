@@ -1,29 +1,29 @@
 import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
-import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersRepository } from './users.repository';
 
 
 @Controller('users')
 export class UsersController {
-    constructor(private usersService: UsersService) { }
+    constructor(private usersRepository: UsersRepository) { }
 
     @Get()
     getUsers() {
-        return this.usersService.findAll();
+        return this.usersRepository.findAll();
     }
 
     @Get(":id")
     getUser(@Param("id") id: number) {
-        return this.usersService.findOne(id);
+        return this.usersRepository.findOne(id);
     }
 
     @Delete(":id")
     deleteUser(@Param("id") id: number) {
-        return this.usersService.delete(id);
+        return this.usersRepository.delete(id);
     }
 
     @Patch(":id")
     updateUser(@Param("id") id: number, @Body() updatedUser: UpdateUserDto) {
-        return this.usersService.update(id, updatedUser);
+        return this.usersRepository.update(id, updatedUser);
     }
 }
